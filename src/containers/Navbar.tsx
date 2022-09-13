@@ -10,8 +10,11 @@ import {
 	IconReceipt2,
 	IconLogout,
 	TablerIcon,
+	IconLogin,
 } from "@tabler/icons";
 import { UserButton } from "../components";
+import { UserButtonProps } from "../components/UserButton";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const useStyles = createStyles((theme, _params, getRef) => {
 	const icon = getRef("icon");
@@ -108,6 +111,8 @@ type navprops = {
 export default function NavbarSimple({ activeChange, data }: navprops) {
 	const { classes, cx } = useStyles();
 	const [active, setActive] = useState("Dashboard");
+	const { loginWithRedirect, user, logout, isAuthenticated, isLoading } =
+		useAuth0();
 
 	const links = data.map((item) => (
 		<a
@@ -135,18 +140,48 @@ export default function NavbarSimple({ activeChange, data }: navprops) {
 					<Menu.Target>
 						<div>
 							<UserButton
-								image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5GK2F70JKKAtyVo94TUOhCiLxaaCLum0TL7PkCZmwKWZuQ7M8dGfi00PEGzA3wMaJyH0:https://static.wikia.nocookie.net/minecraft_gamepedia/images/0/03/Steve_%2528Dungeons%2529.png/revision/latest/scale-to-width-down/217%3Fcb%3D20200603190757&usqp=CAU"
-								name="Steve"
-								email="steve#1118"
+								{...(isAuthenticated
+									? {
+											image: user?.picture,
+											name: user?.name,
+											email: user?.email,
+									  }
+									: {
+											image: "https://i.ebayimg.com/images/g/MTQAAOSw0BhiGPPk/s-l500.jpg",
+											name: "tsukasa plush",
+											email: "login, or stay stuck in this form. forever.",
+									  })}
 							/>
 						</div>
 					</Menu.Target>
 
 					<Menu.Dropdown>
-						<Menu.Label>Danger zone</Menu.Label>
-						<Menu.Item color="red" icon={<IconLogout size={14} />}>
-							Logout.
-						</Menu.Item>
+						{user == null ? (
+							<Menu.Item
+								color="green"
+								icon={<IconLogin size={14} />}
+								onClick={() => {
+									loginWithRedirect();
+								}}
+							>
+								Login
+							</Menu.Item>
+						) : (
+							<>
+								<Menu.Label>Danger zone</Menu.Label>
+								<Menu.Item
+									color="red"
+									icon={<IconLogout size={14} />}
+									onClick={() => {
+										logout({
+											returnTo: window.location.origin,
+										});
+									}}
+								>
+									Logout.
+								</Menu.Item>
+							</>
+						)}
 					</Menu.Dropdown>
 				</Menu>
 			</Navbar.Section>
