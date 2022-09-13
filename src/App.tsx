@@ -8,17 +8,17 @@ import {
 	Stack,
 } from "@mantine/core";
 import { IconBeer, IconLayoutDashboard, IconTicket } from "@tabler/icons";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Dashboard, NavbarSimple, Orders } from "./containers";
 
 const data = [
 	{
-		element: <Dashboard />,
+		element: Dashboard,
 		label: "Dashboard",
 		icon: IconLayoutDashboard,
 	},
 	{
-		element: <Orders />,
+		element: Orders,
 		label: "Orders",
 		icon: IconTicket,
 	},
@@ -78,9 +78,13 @@ function App() {
 				},
 			})}
 		>
-			{data[active].element}
+			{wrapper(data[active].element, {})}
 		</AppShell>
 	);
+}
+
+function wrapper(WrappedElement: any, props: any) {
+	return <WrappedElement {...props} />;
 }
 
 export default App;

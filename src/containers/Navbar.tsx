@@ -104,7 +104,7 @@ type navprops = {
 	data: {
 		label: string;
 		icon: TablerIcon;
-		element: JSX.Element;
+		element: () => JSX.Element;
 	}[];
 };
 
@@ -142,9 +142,10 @@ export default function NavbarSimple({ activeChange, data }: navprops) {
 							<UserButton
 								{...(isAuthenticated
 									? {
-											image: user?.picture,
-											name: user?.name,
-											email: user?.email,
+											// safely assume that user is not null, since isAuthenticated is true
+											image: user?.picture as string,
+											name: user?.name as string,
+											email: user?.email as string,
 									  }
 									: {
 											image: "https://i.ebayimg.com/images/g/MTQAAOSw0BhiGPPk/s-l500.jpg",
