@@ -8,6 +8,7 @@ import {
 	Stack,
 } from "@mantine/core";
 import { IconBeer, IconLayoutDashboard, IconTicket } from "@tabler/icons";
+import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { Dashboard, NavbarSimple, Orders } from "./containers";
 
@@ -78,13 +79,26 @@ function App() {
 				},
 			})}
 		>
-			{wrapper(data[active].element, {})}
+			<AnimatePresence>
+				{wrapper(data[active].element, {})}
+			</AnimatePresence>
 		</AppShell>
 	);
 }
 
 function wrapper(WrappedElement: any, props: any) {
-	return <WrappedElement {...props} />;
+	return (
+		<motion.div
+			key={WrappedElement.name}
+			exit={{ opacity: 0, translateY: "-5vh" }}
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			style={{ position: "absolute" }}
+			transition={{ ease: "easeOut" }}
+		>
+			<WrappedElement {...props} />
+		</motion.div>
+	);
 }
 
 export default App;

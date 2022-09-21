@@ -6,11 +6,11 @@ export default function Dashboard() {
 	return (
 		<h1>
 			{user ? (
-				`Hello, ${user.name}`
+				`hi there, ${user.name}`
 			) : isLoading ? (
 				<Skeleton />
 			) : (
-				`Dashboard`
+				"wow you haven't logged in yet smh my head."
 			)}
 		</h1>
 	);
